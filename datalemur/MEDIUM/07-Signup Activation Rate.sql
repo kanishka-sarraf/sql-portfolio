@@ -16,6 +16,9 @@ For example, user 123 in the emails table may not be in the texts table and vice
 */
 
 -- solution1 (OPTIMAL)
+-- filter confirmed texts 
+-- left join with email table -> to get all email ids
+-- calculate confirm_rate = confirmed_text / total_email
 select 
   round((count(cs.email_id)*1.0) / count(e.email_id),2) as confirm_rate
 from emails e
@@ -24,6 +27,7 @@ left join (
   from texts
   where signup_action = 'Confirmed'
 ) cs on e.email_id = cs.email_id;
+
 
 -- solution2 (NOT OPTIMAL)
 SELECT
@@ -39,20 +43,13 @@ SELECT
     2
   ) AS confirm_rate;
 /*
-Problems
-
-Two separate scans
-
+1. Two separate scans
 emails scanned once
-
 emails + texts scanned again
 
-Scalar subqueries
-
+2. Scalar subqueries
 Prevent join reordering
-
 Harder for optimizer
-
 Poor scalability
 */
 
